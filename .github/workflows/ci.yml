@@ -41,7 +41,9 @@ jobs:
         run: tree
 
       - name: run so for integration testing to work
-        run: dotnet run --project ./web/web.csproj --no-build -c Release
+        run: |
+          dotnet run --project ./web/web.csproj --no-build -c Release &
+          sleep 10
 
       - name: Test
         run: | 
