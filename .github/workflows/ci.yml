@@ -37,6 +37,9 @@ jobs:
       - name: Build
         run: dotnet build -c Release --no-restore 
 
+      - name: run so for integration testing to work
+        run: dotnet run --no-build 
+
       - name: Test
         run: | 
           dotnet test simpleci-cd.sln --no-build -c Release --verbosity normal \
