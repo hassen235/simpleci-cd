@@ -38,7 +38,7 @@ jobs:
         run: dotnet build -c Release --no-restore 
 
       - name: run so for integration testing to work
-        run: dotnet run --no-build 
+        run: dotnet run --project ./web/web.csproj --no-build 
 
       - name: Test
         run: | 
