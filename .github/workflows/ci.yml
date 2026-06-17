@@ -32,7 +32,7 @@ jobs:
         # The cache key uses a hash of all .csproj files — so it only invalidates when dependencies actually change, not on every code push. This mirrors the same principle as the Docker layer caching trick I described in Docker Multi-Stage Builds for .NET: Smaller & Faster Images.
 
       - name: Restoring
-        run: dotnet restore -c Release
+        run: dotnet restore
 
       - name: Build
         run: dotnet build -c Release --no-restore 
