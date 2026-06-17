@@ -37,8 +37,11 @@ jobs:
       - name: Build
         run: dotnet build -c Release --no-restore 
 
+      - name: current directory
+        run: tree
+
       - name: run so for integration testing to work
-        run: dotnet run --project web/bin/Release/net10.0/web.dll --no-build 
+        run: dotnet run --project ./web/web.csproj --no-build 
 
       - name: Test
         run: | 
