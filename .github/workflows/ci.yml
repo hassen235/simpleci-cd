@@ -1,0 +1,49 @@
+#this is a work flow and especially a ci workflow
+name: CI - BUILD & TEST
+
+on:
+  push:
+    branches:
+      - main
+env:
+  DOTNET-VERSION: "10.0.x"
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu:latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+
+      - name: setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET-VERSION }}
+
+      # The actions/cache step for NuGet is the single biggest CI speed improvement I've found. Without it, dotnet restore re-downloads all packages on every run. With it, cache hits drop restore time from ~90 seconds to under 5 seconds.
+      - name: Cache Nuget packages
+        uses: actions/cache@v5
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+        # The cache key uses a hash of all .csproj files — so it only invalidates when dependencies actually change, not on every code push. This mirrors the same principle as the Docker layer caching trick I described in Docker Multi-Stage Builds for .NET: Smaller & Faster Images.
+
+      - name: Restoring
+        run: dotnet restore -c Release
+
+      - name: Build
+        run: dotnet build -c Release --no-restore 
+
+      - name: Test
+        run: dotnet test --no-build -c Release --verbosity normal \
+          --collect:"XPlat Code Coverage" \
+          --results-directory ./coverage 
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: ./coverage
