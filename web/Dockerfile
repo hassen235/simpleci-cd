@@ -14,7 +14,7 @@ FROM dhi.io/aspnetcore:10
 
 WORKDIR /app
 
-COPY --from=build ./publish/ .
+COPY --from=build ./source/publish/ .
 
 WORKDIR /publish
 
