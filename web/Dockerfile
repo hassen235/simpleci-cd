@@ -8,7 +8,7 @@ RUN dotnet restore  ./web.csproj
 
 COPY . .
 
-RUN dotnet publish -o ./publish --no-build --no-restore
+RUN dotnet publish -c Release -o ./publish --no-restore
 
 FROM dhi.io/aspnetcore:10
 
